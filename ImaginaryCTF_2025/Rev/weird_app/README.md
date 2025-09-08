@@ -39,7 +39,7 @@ The UI then displays the transformed result. We must **reverse** these shifts to
 3. In the left tree, expand `sources` and browse `MainActivityKt`.
 4. Locate the decompiled function:
 
-'''kotlin
+```kotlin
 public static final String transformFlag(String flag) {
     String res = "";
     int length = flag.length();
@@ -68,29 +68,31 @@ public static final String transformFlag(String flag) {
     }
     return res;
 }
-'''
-idvi+1{s6e3{)arg2zv[moqa905+
-This is the encoded form of the actual flag.
+```
+### 2 Decrypt the flag
+With the encryption logic understood, the next step is to write a script to reverse it. For each character in the transformed string, we must apply the inverse operation based on its index i.
 
-so the function decoded the flag :
-Letters (a–z): shifted forward by +i positions mod 26
+The decoding formula for each character is: \
+Original_Index = (Transformed_Index - Shift_Value) mod Alphabet_Size
 
-Digits (0–9): shifted forward by +2*i positions mod 10
+Letters: original_index = (transformed_index - i) % 26
 
-Specials (!@#$%^&*()_+{}[]|): shifted forward by +i² positions mod 18
+Digits: original_index = (transformed_index - 2*i) % 10
 
-Where i = index of character in the string (0-based)
+Special Characters: original_index = (transformed_index - i*i) % 18
 
-5. Inversion (Decoding Rules)
+### 3 Find the encoded flag 
+Look down a little bit from the main function we saw:
+```
+"Transformed flag: idvi+1{s6e3{)arg2zv[moqa905+"
+```
 
-Since the transform is reversible:
+As a result, we can confirm that: "idvi+1{s6e3{)arg2zv[moqa905+"
+ is the encoded flag
 
-Letters: orig = (encIndex – i) mod 26
+### 4 Code the inversion
 
-Digits: orig = (encIndex – 2*i) mod 10
-
-Specials: orig = (encIndex – i²) mod 18
-'''python
+```python
 abc = "abcdefghijklmnopqrstuvwxyz"
 dig = "0123456789"
 spec = "!@#$%^&*()_+{}[]|"
@@ -107,8 +109,10 @@ for i, ch in enumerate(out):
         res.append(spec[(spec.index(ch) - i*i) % len(spec)])
 
 print("".join(res))
-'''
-ictf{1_l0v3_@ndr0id_stud103}
+```
+The output
+
+### ictf{1_l0v3_@ndr0id_stud103}
 
 
 
