@@ -213,3 +213,4 @@ no PIE means function addresses are stable; you can lift them straight from ghid
 sometimes the program will mangle your integer before using it (here, a right shift by 8). gdb symptoms (jumping to a truncated address like 0x4011) are a great hint to re-check bit operations.
 
 even with stack canary and NX, you can still win by steering an indirect call/jump to a fixed win() gadget.
+
